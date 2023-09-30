@@ -3,10 +3,13 @@ import { Card, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../store/cartSlice";
 import { getProducts } from "../store/productSlice";
+import { Alert } from "react-bootstrap";
 
 const Product = () => {
   const dispatch = useDispatch();
-  const { data: products } = useSelector((state) => state.products);
+  const { data: products, status } = useSelector((state) => state.products);
+  console.log("products: ");
+  console.log(products);
 
   useEffect(() => {
     // fetch("https://fakestoreapi.com/products")
@@ -19,6 +22,18 @@ const Product = () => {
     //dispatch an action
     dispatch(add(product));
   };
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "Error") {
+    return (
+      <Alert key="danger" variant="danger">
+        Something went wrong, try again later!
+      </Alert>
+    );
+  }
 
   const cards = products.map((product) => (
     <div className="col-md-3">
